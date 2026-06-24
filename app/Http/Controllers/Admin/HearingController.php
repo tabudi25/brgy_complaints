@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Complaint;
 use App\Models\Hearing;
+use App\Notifications\HearingScheduled;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -44,6 +45,8 @@ class HearingController extends Controller
         $hearing = Hearing::create($validated);
 
         $hearing->complaint->update(['status' => Complaint::STATUS_SCHEDULED]);
+
+        $hearing->complaint->resident->user->notify(new HearingScheduled($hearing));
 
         return redirect()->route('admin.hearings.index')
             ->with('success', 'Hearing scheduled successfully.');
