@@ -9,8 +9,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-900">
-    <header class="bg-white border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <x-application-logo class="h-10 w-auto fill-current text-blue-700" />
                 <div>
@@ -54,15 +54,15 @@
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <h2 class="text-2xl font-bold text-center mb-10">How It Works</h2>
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+                <div class="bg-white rounded-lg shadow-md p-6 border border-gray-100 hover:shadow-lg transition-shadow">
                     <div class="text-blue-600 font-bold text-xl mb-2">1. Register</div>
                     <p class="text-gray-600">Residents create an account with their profile information to access the system.</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+                <div class="bg-white rounded-lg shadow-md p-6 border border-gray-100 hover:shadow-lg transition-shadow">
                     <div class="text-blue-600 font-bold text-xl mb-2">2. Submit Complaint</div>
                     <p class="text-gray-600">File a complaint with details and optional evidence such as photos or documents.</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+                <div class="bg-white rounded-lg shadow-md p-6 border border-gray-100 hover:shadow-lg transition-shadow">
                     <div class="text-blue-600 font-bold text-xl mb-2">3. Track Progress</div>
                     <p class="text-gray-600">Monitor complaint status and view scheduled hearings until resolution.</p>
                 </div>
