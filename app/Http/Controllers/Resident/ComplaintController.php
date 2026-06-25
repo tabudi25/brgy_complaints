@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Resident;
 
 use App\Http\Controllers\Controller;
 use App\Models\Complaint;
+use App\Models\User;
+use App\Notifications\NewComplaintFiled;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -46,10 +48,15 @@ class ComplaintController extends Controller
             $validated['evidence_file'] = $request->file('evidence_file')->store('evidence', 'public');
         }
 
-        $resident->complaints()->create([
+        $complaint = $resident->complaints()->create([
             ...$validated,
             'status' => Complaint::STATUS_PENDING,
         ]);
+
+        $admins = User::where('role', User::ROLE_ADMIN)->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new NewComplaintFiled($complaint));
+        }
 
         return redirect()->route('resident.complaints.index')
             ->with('success', 'Complaint submitted successfully.');

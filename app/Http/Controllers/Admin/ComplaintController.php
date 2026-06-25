@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Complaint;
 use App\Models\Resident;
+use App\Notifications\ComplaintStatusChanged;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -76,6 +77,8 @@ class ComplaintController extends Controller
             'status' => ['required', Rule::in(Complaint::STATUSES)],
         ]);
 
+        $oldStatus = $complaint->status;
+
         if ($request->hasFile('evidence_file')) {
             if ($complaint->evidence_file) {
                 Storage::disk('public')->delete($complaint->evidence_file);
@@ -85,6 +88,10 @@ class ComplaintController extends Controller
         }
 
         $complaint->update($validated);
+
+        if ($oldStatus !== $complaint->status) {
+            $complaint->resident->user->notify(new ComplaintStatusChanged($complaint, $oldStatus));
+        }
 
         return redirect()->route('admin.complaints.index')
             ->with('success', 'Complaint updated successfully.');
@@ -108,7 +115,12 @@ class ComplaintController extends Controller
             'status' => ['required', Rule::in(Complaint::STATUSES)],
         ]);
 
+        $oldStatus = $complaint->status;
         $complaint->update(['status' => $validated['status']]);
+
+        if ($oldStatus !== $complaint->status) {
+            $complaint->resident->user->notify(new ComplaintStatusChanged($complaint, $oldStatus));
+        }
 
         return back()->with('success', 'Complaint status updated successfully.');
     }
